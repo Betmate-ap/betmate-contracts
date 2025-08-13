@@ -1,17 +1,25 @@
 {
   "name": "@betmate-ap/contracts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "GraphQL schema and generated TypeScript types for BetMate",
   "type": "module",
   "main": "generated/schema-types.ts",
   "types": "generated/schema-types.ts",
-  "files": ["generated", "src/schema"],
+  "files": [
+    "generated",
+    "src/schema"
+  ],
   "scripts": {
     "codegen": "graphql-codegen --config codegen.ts",
     "build": "npm run codegen && tsc -p tsconfig.json"
   },
-  "keywords": ["graphql", "schema", "types", "betmate"],
+  "keywords": [
+    "graphql",
+    "schema",
+    "types",
+    "betmate"
+  ],
   "author": "betmate-ap",
   "license": "MIT",
   "dependencies": {

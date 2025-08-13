@@ -1,4 +1,15 @@
 schema { query: Query, mutation: Mutation }
 
-type Query { health: String! }
+type Query {
+  health: String!
+  me: User
+}
+
 type Mutation { _noop: Boolean }
+
+type User {
+  id: Int!
+  username: String!
+  firstName: String!
+  lastName: String!
+}

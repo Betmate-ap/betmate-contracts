@@ -1,11 +1,16 @@
-schema { query: Query, mutation: Mutation }
+schema {
+  query: Query
+  mutation: Mutation
+}
 
 type Query {
   health: String!
   me: User
 }
 
-type Mutation { _noop: Boolean }
+type Mutation {
+  _noop: Boolean
+}
 
 type User {
   id: Int!

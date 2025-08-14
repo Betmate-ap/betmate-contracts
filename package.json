@@ -12,7 +12,12 @@
   ],
   "scripts": {
     "codegen": "graphql-codegen --config codegen.ts",
-    "build": "npm run codegen && tsc -p tsconfig.json"
+    "build": "npm run codegen && tsc -p tsconfig.json",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [
     "graphql",
@@ -30,6 +35,12 @@
     "@graphql-codegen/typescript": "^4.1.6",
     "@graphql-codegen/typescript-operations": "^4.6.1",
     "@graphql-codegen/typescript-resolvers": "^4.5.1",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
+    "@typescript-eslint/parser": "^8.39.1",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.2"
   }
 }

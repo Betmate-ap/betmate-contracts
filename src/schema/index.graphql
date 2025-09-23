@@ -9,14 +9,58 @@ type Query {
 }
 
 type Mutation {
-  _noop: Boolean
+  # Authentication mutations
+  signup(input: SignupInput!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+  refreshToken: AuthPayload!
+  logout: Boolean!
+
+  # Email verification
+  sendVerificationEmail: Boolean!
+  verifyEmail(token: String!): Boolean!
+
+  # Password management
+  forgotPassword(email: String!): Boolean!
+  resetPassword(input: ResetPasswordInput!): Boolean!
 }
 
+# User type with enhanced fields
 type User {
-  id: Int!
+  id: String!
+  email: String!
   username: String!
   firstName: String!
   lastName: String!
-  email: String!
+  avatar: String
+  emailVerified: Boolean!
+  lastLogin: String
+  isActive: Boolean!
   createdAt: String!
+  updatedAt: String!
+}
+
+# Authentication payload
+type AuthPayload {
+  user: User!
+  accessToken: String!
+  refreshToken: String!
+}
+
+# Input types
+input SignupInput {
+  email: String!
+  username: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input ResetPasswordInput {
+  token: String!
+  newPassword: String!
 }

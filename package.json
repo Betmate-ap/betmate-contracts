@@ -36,6 +36,10 @@
   ],
   "author": "betmate-ap",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Betmate-ap/betmate-contracts.git"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },

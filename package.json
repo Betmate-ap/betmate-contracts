@@ -36,6 +36,9 @@
   ],
   "author": "betmate-ap",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "dependencies": {
     "graphql": "^16.11.0"
   },

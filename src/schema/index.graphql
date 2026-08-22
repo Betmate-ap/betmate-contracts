@@ -3,50 +3,177 @@ schema {
   mutation: Mutation
 }
 
+# ─── Queries ──────────────────────────────────────────────────────────────────
+
 type Query {
   health: String!
   me: User
+
+  # Betmates
+  myBetmates: [User!]!
+  pendingFriendRequests: [Friendship!]!
+  sentFriendRequests: [Friendship!]!
+  searchUsers(query: String!): [UserSearchResult!]!
+
+  # Matches
+  matches(status: MatchStatus): [Match!]!
+  match(id: ID!): Match
+
+  # Bets
+  myBets(status: BetStatus): [Bet!]!
+  headToHead(betmateId: ID!): HeadToHead!
+  leaderboard: [LeaderboardEntry!]!
 }
 
+# ─── Mutations ────────────────────────────────────────────────────────────────
+
 type Mutation {
-  # Authentication mutations
+  # Auth
   signup(input: SignupInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
   refreshToken: AuthPayload!
   logout: Boolean!
-
-  # Email verification
   sendVerificationEmail: Boolean!
   verifyEmail(token: String!): Boolean!
-
-  # Password management
   forgotPassword(email: String!): Boolean!
   resetPassword(input: ResetPasswordInput!): Boolean!
+
+  # Betmates
+  sendFriendRequest(userId: ID!): Friendship!
+  acceptFriendRequest(friendshipId: ID!): Friendship!
+  declineFriendRequest(friendshipId: ID!): Boolean!
+  removeBetmate(userId: ID!): Boolean!
+  blockUser(userId: ID!): Boolean!
+  unblockUser(userId: ID!): Boolean!
+
+  # Bets
+  sendChallenge(input: SendChallengeInput!): Bet!
+  acceptChallenge(betId: ID!): Bet!
+  declineChallenge(betId: ID!): Boolean!
+  flipCoin(betId: ID!): Bet!
+  selectTeam(input: SelectTeamInput!): Bet!
 }
 
-# User type with enhanced fields
+# ─── User ─────────────────────────────────────────────────────────────────────
+
 type User {
-  id: String!
+  id: ID!
   email: String!
   username: String!
   firstName: String!
   lastName: String!
   avatar: String
   emailVerified: Boolean!
+  points: Int!
   lastLogin: String
   isActive: Boolean!
   createdAt: String!
   updatedAt: String!
 }
 
-# Authentication payload
+type UserSearchResult {
+  user: User!
+  friendshipStatus: FriendshipStatus
+  friendshipId: ID
+}
+
+# ─── Auth ─────────────────────────────────────────────────────────────────────
+
 type AuthPayload {
   user: User!
   accessToken: String!
   refreshToken: String!
 }
 
-# Input types
+# ─── Betmates (Friends) ───────────────────────────────────────────────────────
+
+type Friendship {
+  id: ID!
+  requester: User!
+  receiver: User!
+  status: FriendshipStatus!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+}
+
+# ─── Matches ─────────────────────────────────────────────────────────────────
+
+type Match {
+  id: ID!
+  externalId: String!
+  team1: String!
+  team2: String!
+  scheduledAt: String!
+  venue: String
+  tournament: String!
+  status: MatchStatus!
+  winnerTeam: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum MatchStatus {
+  UPCOMING
+  LIVE
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+# ─── Bets ─────────────────────────────────────────────────────────────────────
+
+type Bet {
+  id: ID!
+  match: Match!
+  challenger: User!
+  challengee: User!
+  tossWinner: User
+  challengerPick: String
+  challengeePick: String
+  status: BetStatus!
+  pointsStake: Int!
+  winner: User
+  tossDoneAt: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum BetStatus {
+  PENDING
+  ACCEPTED
+  TOSS_DONE
+  TEAMS_LOCKED
+  COMPLETED
+  DECLINED
+  EXPIRED
+  CANCELLED
+}
+
+type HeadToHead {
+  betmate: User!
+  myWins: Int!
+  theirWins: Int!
+  netPoints: Int!
+  bets: [Bet!]!
+}
+
+type LeaderboardEntry {
+  rank: Int!
+  user: User!
+  points: Int!
+  betsWon: Int!
+  betsLost: Int!
+  totalBets: Int!
+}
+
+# ─── Inputs ───────────────────────────────────────────────────────────────────
+
 input SignupInput {
   email: String!
   username: String!
@@ -63,4 +190,14 @@ input LoginInput {
 input ResetPasswordInput {
   token: String!
   newPassword: String!
+}
+
+input SendChallengeInput {
+  matchId: ID!
+  challengeeId: ID!
+}
+
+input SelectTeamInput {
+  betId: ID!
+  team: String!
 }

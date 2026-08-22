@@ -31,6 +31,7 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   forgotPassword: Scalars['Boolean']['output'];
+  googleLogin: AuthPayload;
   login: AuthPayload;
   logout: Scalars['Boolean']['output'];
   refreshToken: AuthPayload;
@@ -43,6 +44,11 @@ export type Mutation = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
+};
+
+
+export type MutationGoogleLoginArgs = {
+  idToken: Scalars['String']['input'];
 };
 
 
@@ -203,6 +209,7 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   forgotPassword?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
+  googleLogin?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationGoogleLoginArgs, 'idToken'>>;
   login?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   refreshToken?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType>;

@@ -12,6 +12,7 @@ type Mutation {
   # Authentication mutations
   signup(input: SignupInput!): AuthPayload!
   login(input: LoginInput!): AuthPayload!
+  googleLogin(idToken: String!): AuthPayload!
   refreshToken: AuthPayload!
   logout: Boolean!
 

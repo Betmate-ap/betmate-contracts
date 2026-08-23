@@ -51,6 +51,11 @@ export enum BetStatus {
   TossDone = 'TOSS_DONE'
 }
 
+export type ChangePasswordInput = {
+  currentPassword: Scalars['String']['input'];
+  newPassword: Scalars['String']['input'];
+};
+
 export type Friendship = {
   __typename?: 'Friendship';
   createdAt: Scalars['String']['output'];
@@ -119,6 +124,8 @@ export type Mutation = {
   acceptChallenge: Bet;
   acceptFriendRequest: Friendship;
   blockUser: Scalars['Boolean']['output'];
+  cancelChallenge: Scalars['Boolean']['output'];
+  changePassword: Scalars['Boolean']['output'];
   declineChallenge: Scalars['Boolean']['output'];
   declineFriendRequest: Scalars['Boolean']['output'];
   flipCoin: Bet;
@@ -134,6 +141,7 @@ export type Mutation = {
   sendVerificationEmail: Scalars['Boolean']['output'];
   signup: AuthPayload;
   unblockUser: Scalars['Boolean']['output'];
+  updateProfile: User;
   verifyEmail: Scalars['Boolean']['output'];
 };
 
@@ -150,6 +158,16 @@ export type MutationAcceptFriendRequestArgs = {
 
 export type MutationBlockUserArgs = {
   userId: Scalars['ID']['input'];
+};
+
+
+export type MutationCancelChallengeArgs = {
+  betId: Scalars['ID']['input'];
+};
+
+
+export type MutationChangePasswordArgs = {
+  input: ChangePasswordInput;
 };
 
 
@@ -213,12 +231,18 @@ export type MutationUnblockUserArgs = {
 };
 
 
+export type MutationUpdateProfileArgs = {
+  input: UpdateProfileInput;
+};
+
+
 export type MutationVerifyEmailArgs = {
   token: Scalars['String']['input'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  blockedUsers: Array<User>;
   headToHead: HeadToHead;
   health: Scalars['String']['output'];
   leaderboard: Array<LeaderboardEntry>;
@@ -278,6 +302,12 @@ export type SignupInput = {
   lastName: Scalars['String']['input'];
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+export type UpdateProfileInput = {
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -378,6 +408,7 @@ export type ResolversTypes = {
   Bet: ResolverTypeWrapper<Bet>;
   BetStatus: BetStatus;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  ChangePasswordInput: ChangePasswordInput;
   Friendship: ResolverTypeWrapper<Friendship>;
   FriendshipStatus: FriendshipStatus;
   HeadToHead: ResolverTypeWrapper<HeadToHead>;
@@ -394,6 +425,7 @@ export type ResolversTypes = {
   SendChallengeInput: SendChallengeInput;
   SignupInput: SignupInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UpdateProfileInput: UpdateProfileInput;
   User: ResolverTypeWrapper<User>;
   UserSearchResult: ResolverTypeWrapper<UserSearchResult>;
 };
@@ -403,6 +435,7 @@ export type ResolversParentTypes = {
   AuthPayload: AuthPayload;
   Bet: Bet;
   Boolean: Scalars['Boolean']['output'];
+  ChangePasswordInput: ChangePasswordInput;
   Friendship: Friendship;
   HeadToHead: HeadToHead;
   ID: Scalars['ID']['output'];
@@ -417,6 +450,7 @@ export type ResolversParentTypes = {
   SendChallengeInput: SendChallengeInput;
   SignupInput: SignupInput;
   String: Scalars['String']['output'];
+  UpdateProfileInput: UpdateProfileInput;
   User: User;
   UserSearchResult: UserSearchResult;
 };
@@ -493,6 +527,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   acceptChallenge?: Resolver<ResolversTypes['Bet'], ParentType, ContextType, RequireFields<MutationAcceptChallengeArgs, 'betId'>>;
   acceptFriendRequest?: Resolver<ResolversTypes['Friendship'], ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'friendshipId'>>;
   blockUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationBlockUserArgs, 'userId'>>;
+  cancelChallenge?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCancelChallengeArgs, 'betId'>>;
+  changePassword?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'input'>>;
   declineChallenge?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeclineChallengeArgs, 'betId'>>;
   declineFriendRequest?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeclineFriendRequestArgs, 'friendshipId'>>;
   flipCoin?: Resolver<ResolversTypes['Bet'], ParentType, ContextType, RequireFields<MutationFlipCoinArgs, 'betId'>>;
@@ -508,10 +544,12 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   sendVerificationEmail?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   signup?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationSignupArgs, 'input'>>;
   unblockUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnblockUserArgs, 'userId'>>;
+  updateProfile?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateProfileArgs, 'input'>>;
   verifyEmail?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationVerifyEmailArgs, 'token'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  blockedUsers?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
   headToHead?: Resolver<ResolversTypes['HeadToHead'], ParentType, ContextType, RequireFields<QueryHeadToHeadArgs, 'betmateId'>>;
   health?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   leaderboard?: Resolver<Array<ResolversTypes['LeaderboardEntry']>, ParentType, ContextType>;

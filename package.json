@@ -1,6 +1,6 @@
 {
   "name": "@betmate-ap/contracts",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": false,
   "description": "GraphQL schema and generated TypeScript types for BetMate",
   "type": "module",

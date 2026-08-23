@@ -14,6 +14,7 @@ type Query {
   pendingFriendRequests: [Friendship!]!
   sentFriendRequests: [Friendship!]!
   searchUsers(query: String!): [UserSearchResult!]!
+  blockedUsers: [User!]!
 
   # Matches
   matches(status: MatchStatus): [Match!]!
@@ -46,10 +47,15 @@ type Mutation {
   blockUser(userId: ID!): Boolean!
   unblockUser(userId: ID!): Boolean!
 
+  # Profile
+  updateProfile(input: UpdateProfileInput!): User!
+  changePassword(input: ChangePasswordInput!): Boolean!
+
   # Bets
   sendChallenge(input: SendChallengeInput!): Bet!
   acceptChallenge(betId: ID!): Bet!
   declineChallenge(betId: ID!): Boolean!
+  cancelChallenge(betId: ID!): Boolean!
   flipCoin(betId: ID!): Bet!
   selectTeam(input: SelectTeamInput!): Bet!
 }
@@ -200,4 +206,15 @@ input SendChallengeInput {
 input SelectTeamInput {
   betId: ID!
   team: String!
+}
+
+input UpdateProfileInput {
+  firstName: String
+  lastName: String
+  username: String
+}
+
+input ChangePasswordInput {
+  currentPassword: String!
+  newPassword: String!
 }
